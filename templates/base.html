@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hostel Management System{% endblock %}</title>
+    {% load static %}
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<style>
+    body {
+        background-image: url('{% static "background-image.jpg" %}');
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        min-height: 100vh;
+    }
+
+    .left-text {
+        font-family: "Franklin Gothic Medium", sans-serif;
+        font-weight: bolder;
+        font-size: 4em;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .header-text {
+        font-family: "Franklin Gothic Medium", sans-serif;
+        font-weight: bolder;
+        font-size: 3em;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .navbar-brand {
+        font-family: "Franklin Gothic Medium", sans-serif;
+        font-weight: bolder;
+        font-size: 1.5rem;
+        color: #0066cc !important;
+    }
+
+    #sub-text {
+        font-size: 1.2em;
+        color: white;
+        font-family: "Fira Code", sans-serif;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+</style>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/"><i class="fas fa-hotel"></i> University Hostel</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            {% if user.is_authenticated %}
+                {% if user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-toggle="dropdown">
+                            <i class="fas fa-cog"></i> Management
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'fetch_applications' %}"><i class="fas fa-file-alt"></i> Applications</a>
+                            <a class="dropdown-item" href="{% url 'fetch_complaints' %}"><i class="fas fa-exclamation-circle"></i> Complaints</a>
+                            <a class="dropdown-item" href="/admin"><i class="fas fa-tools"></i> Admin Panel</a>
+                        </div>
+                    </li>
+                {% elif user.is_student %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_dashboard' %}"><i class="fas fa-home"></i> My Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'lodge_complaint' %}"><i class="fas fa-comment-alt"></i> Lodge Complaint</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'download_voucher' %}"><i class="fas fa-download"></i> Fee Voucher</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> {{ user.username }}
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#"><i class="fas fa-user"></i> Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-primary text-white ml-2" href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> Signup</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Messages Display -->
+{% if messages %}
+<div class="messages-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {% if message.tags == 'error' %}
+                <i class="fas fa-exclamation-circle"></i>
+            {% elif message.tags == 'success' %}
+                <i class="fas fa-check-circle"></i>
+            {% elif message.tags == 'warning' %}
+                <i class="fas fa-exclamation-triangle"></i>
+            {% elif message.tags == 'info' %}
+                <i class="fas fa-info-circle"></i>
+            {% endif %}
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span>&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="container-fluid mt-4">
+    {% block fullcontent %}
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 class="left-text">Your Home Away From Home</h1>
+                <p id="sub-text">Comfortable & Secure Student Living</p>
+            </div>
+            <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+</div>
+
+<footer class="footer mt-5">
+    <div class="container text-center">
+        <p class="text-white">&copy; 2024 University Hostel Management System. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+{% block extra_js %}{% endblock %}
+
+<script>
+    // Auto-dismiss messages after 5 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut('slow');
+    }, 5000);
+</script>
+</body>
+</html>
+

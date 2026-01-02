@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if show_buttons %}
+        <!-- Render "download voucher" and "submit a complaint" cards -->
+        <div class="customcontainer">
+
+        <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+            <div class="card-header">Download Fee Voucher</div>
+            <div class="card-body">
+                <h5 class="card-title">Click here to download your fee voucher</h5>
+                <p class="card-text"><a href="{% url 'download_voucher' %}" class="btn btn-primary btn-lg btn-block">Download</a></p>
+            </div>
+        </div>
+             <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
+            <div class="card-header">Lodge A Complaint</div>
+            <div class="card-body">
+                <h5 class="card-title">Click here to lodge a complaint.</h5>
+                <p class="card-text"><a href="{% url 'lodge_complaint' %}" class="btn btn-primary btn-lg btn-block">Lodge</a></p>
+            </div>
+             </div>
+
+
+
+            {% else %}
+            <!-- Render "apply for room allocation" card -->
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Apply for Room</h5>
+                    <p class="card-text">Click here to apply for a room.</p>
+                    <a href="{% url 'apply_room' %}" class="btn btn-primary">Apply</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col"><h1 class="header-text"> Applications </h1>
+
+  <table class="table table-striped">
+
+    <tr>
+      <th>ID</th>
+      <th>Room Type</th>
+      <th>Occupancy</th>
+      <th>Status</th>
+      <th>Applicant ID</th>
+      <th>Applicant Name</th>
+    </tr>
+    {% for application in applications %}
+      <tr>
+        <td>{{ application.id }}</td>
+        <td>{{ application.room_type }}</td>
+        <td>{{ application.occupancy }}</td>
+        <td>
+          {% if application.status %}
+            <span class="status-badge badge-approved">Approved</span>
+          {% else %}
+            <span class="status-badge badge-pending">Pending</span>
+          {% endif %}
+        </td>
+        <td>{{ application.applicant.student_id }}</td>
+        <td>{{ application.applicant.name }}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="6" class="text-center">No applications found</td>
+      </tr>
+    {% endfor %}
+  </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col">
+  <h1 class="header-text"> Complaints </h1>
+  <table class="table table-striped">
+
+    <tr>
+      <th>ID</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Student ID</th>
+      <th>Student Name</th>
+    </tr>
+    {% for complaint in complaints %}
+      <tr>
+        <td>{{ complaint.id }}</td>
+        <td>{{ complaint.description }}</td>
+        <td>
+          {% if complaint.status == 'Pending' %}
+            <span class="status-badge badge-pending">{{ complaint.status }}</span>
+          {% elif complaint.status == 'In Progress' %}
+            <span class="status-badge badge-inprogress">{{ complaint.status }}</span>
+          {% else %}
+            <span class="status-badge badge-resolved">{{ complaint.status }}</span>
+          {% endif %}
+        </td>
+        <td>{{ complaint.student.student_id }}</td>
+        <td>{{ complaint.student.name }}</td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">No complaints found</td>
+      </tr>
+    {% endfor %}
+  </table>
+    </div>
+{% endblock %}
