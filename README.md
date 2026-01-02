@@ -52,7 +52,7 @@ A comprehensive, full-stack web application for managing university hostel opera
   - One-click access to all management functions
   - Responsive navigation system
 
-### 👨Student Dashboard
+### Student Dashboard
 
 - **Personal Profile Management**
   - View student details and current status
@@ -99,10 +99,6 @@ A comprehensive, full-stack web application for managing university hostel opera
   - Duplicate prevention mechanisms
   - SQL injection protection via ORM
 
-- **Comprehensive Logging**
-  - All actions logged to `logs/hostel.log`
-  - Error tracking and debugging
-  - User activity monitoring
 
 ### Database Excellence
 
@@ -359,9 +355,6 @@ HostelMS/
 │   │   └── custom.css         # Professional styling
 │   ├── js/                    # JavaScript files
 │   └── background-image.jpg   # UI background
-│
-├── logs/                       # Application logs
-│   └── hostel.log             # Activity logging
 │
 ├── .env                        # Environment variables (gitignored)
 ├── .env.example               # Environment template
